@@ -47,3 +47,7 @@ Thumbs.db
 /playwright-demo-app/dist
 /playwright-demo-app/tmp
 /playwright-demo-backend/venv
+/tests/__pycache__
+/tests/.pytest_cache
+/tests/venv
+.vscode
