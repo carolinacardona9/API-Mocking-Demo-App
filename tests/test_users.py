@@ -12,7 +12,8 @@ def no_records_route(route: Route):
     )
 
 def test_users_no_records(page: Page):
-    page.route('**/api/users**',no_records_route)
+    page.route('**/api/users**', no_records_route)
     page.goto('http://localhost:4200/users')
     msg = page.locator('span.ag-overlay-no-rows-center')
     expect(msg).to_have_text('No Rows To Show')
+
