@@ -38,6 +38,16 @@ def low_stock_route(route: Route):
     )
 
 def test_low_stock_data(page: Page):
+    LOW_STOCK_THRESHOLD = 10
+    WARNING_STOCK_THRESHOLD = 50
+
+    def get_expected_color(stock_value: int) -> str:
+        if stock_value < LOW_STOCK_THRESHOLD:
+            return 'low-stock'
+        elif stock_value < WARNING_STOCK_THRESHOLD:
+            return 'warning-stock'
+        return 'high-stock'
+
     bg_colors = {
         'low-stock': 'rgb(255, 235, 238)',
         'warning-stock': 'rgb(255, 243, 224)',
@@ -46,15 +56,16 @@ def test_low_stock_data(page: Page):
     page.route('**/api/products**', low_stock_route)
     page.goto('http://localhost:4200/products')
     expect(page.locator('div.grid-container')).to_be_visible()
+
     stock_cells = page.locator('.ag-cell[col-id="stock"]').all()
-    stock_values = [int(cell.text_content()) for cell in stock_cells]
-    breakpoint()
-    for i,cell in enumerate(stock_cells):
-        value = stock_values[i]
-        expected_color = 'high-stock'
-        if value < 10:
-            expected_color = 'low-stock'
-        elif value < 50:
-            expected_color = 'warning-stock'
-        expect(cell).to_have_css('background-color', bg_colors[expected_color])
+
+    assert len(stock_cells) > 0, "No records were found on the grid"
+    
+    for cell in stock_cells:
+        cell_text = cell.text_content()
+        try:
+            value = int(cell_text)
+        except ValueError:
+            raise AssertionError(f"Value '{value}' is not a valid number")
+        expect(cell).to_have_css('background-color', bg_colors[get_expected_color(value)])
     
