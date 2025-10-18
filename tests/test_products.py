@@ -57,10 +57,10 @@ def test_low_stock_data(page: Page):
     assert len(stock_cells) > 0, "No records were found on the grid"
 
     for cell in stock_cells:
-        cell_text = cell.text_content()
+        cell_text = cell.text_content().strip()
         try:
             value = int(cell_text)
         except ValueError:
-            raise AssertionError(f"Value '{value}' is not a valid number")
+            raise AssertionError(f"Value '{cell_text}' is not a valid number")
         expect(cell).to_have_css('background-color', get_expected_color(value))
     
