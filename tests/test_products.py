@@ -37,6 +37,10 @@ def low_stock_route(route: Route):
         }
     )
 
+def response_delay_route(route: Route):
+    time.sleep(3)
+    route.continue_()
+
 def test_low_stock_data(page: Page):
     LOW_STOCK_THRESHOLD = 10
     WARNING_STOCK_THRESHOLD = 50
@@ -63,4 +67,12 @@ def test_low_stock_data(page: Page):
         except ValueError:
             raise AssertionError(f"Value '{cell_text}' is not a valid number")
         expect(cell).to_have_css('background-color', get_expected_color(value))
+    
+
+def test_loading_indicator(page: Page):
+    page.route('**/api/products**', response_delay_route)
+    page.goto('http://localhost:4200/products')
+    expect(page.locator('div.grid-container')).to_be_visible()
+    expect(page.locator('div.spinner')).to_be_visible()
+    expect(page.locator('//div[@role="row"]')).to_be_visible()
     
