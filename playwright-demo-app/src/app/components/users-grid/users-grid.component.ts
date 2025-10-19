@@ -4,29 +4,31 @@ import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { ApiService, User } from '../../services/api.service';
+import { SpinnerComponent } from '../app-spinner/app-spinner.component';
 
 @Component({
   selector: 'app-users-grid',
-  imports: [CommonModule, FormsModule, AgGridAngular],
+  imports: [CommonModule, FormsModule, AgGridAngular, SpinnerComponent],
   template: `
-    <div class="grid-container">
       <h2>Users Grid</h2>
       <div class="info-bar">
         <span>Total Records: {{ totalRecords }}</span>
         <span>Current Page: {{ currentPage }}</span>
         <span>Page Size: {{ pageSize }}</span>
       </div>
-      <ag-grid-angular
-        class="ag-theme-alpine"
-        [columnDefs]="columnDefs"
-        [rowData]="rowData"
-        [pagination]="true"
-        [paginationPageSize]="pageSize"
-        [paginationPageSizeSelector]="[10, 25, 50, 100]"
-        [suppressPaginationPanel]="false"
-        (gridReady)="onGridReady($event)"
-        style="width: 100%; height: 600px;"
-      />
+      <div class="grid-wrapper">
+        <app-spinner *ngIf="isLoading"></app-spinner>
+        <ag-grid-angular
+          class="ag-theme-alpine"
+          [columnDefs]="columnDefs"
+          [rowData]="rowData"
+          [pagination]="true"
+          [paginationPageSize]="pageSize"
+          [paginationPageSizeSelector]="[10, 25, 50, 100]"
+          [suppressPaginationPanel]="false"
+          (gridReady)="onGridReady($event)"
+          style="width: 100%; height: 600px;"
+        />
       <div class="pagination-controls">
         <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
         <span>Page {{ currentPage }} of {{ totalPages }}</span>
@@ -86,6 +88,9 @@ import { ApiService, User } from '../../services/api.service';
       border-radius: 4px;
       border: 1px solid #ddd;
     }
+    .grid-wrapper {
+      position: relative;
+    }
   `]
 })
 export class UsersGridComponent implements OnInit {
@@ -94,6 +99,7 @@ export class UsersGridComponent implements OnInit {
   totalRecords = 0;
   currentPage = 1;
   pageSize = 10;
+  isLoading = false;
 
   get totalPages(): number {
     return Math.ceil(this.totalRecords / this.pageSize);
@@ -147,13 +153,16 @@ export class UsersGridComponent implements OnInit {
   }
 
   loadData() {
+    this.isLoading = true;
     this.apiService.getUsers(this.currentPage, this.pageSize).subscribe({
       next: (response) => {
         this.rowData = response.data;
         this.totalRecords = response.total;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading users:', error);
+        this.isLoading = false;
       }
     });
   }
