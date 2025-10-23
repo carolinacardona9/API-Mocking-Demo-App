@@ -1,0 +1,13 @@
+{
+  "buildCommand": "ng build",
+  "outputDirectory": "dist/playwright-demo-app",
+  "devCommand": "ng serve",
+  "installCommand": "npm install",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
