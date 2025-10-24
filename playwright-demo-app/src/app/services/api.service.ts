@@ -36,10 +36,10 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   getUsers(page: number = 1, pageSize: number = 10): Observable<GridResponse<User>> {
-    return this.http.get<GridResponse<User>>(`${environment.apiUrl}/users?page=${page}&pageSize=${pageSize}`);
+    return this.http.get<GridResponse<User>>(`${environment.apiUrl}/api/users?page=${page}&pageSize=${pageSize}`);
   }
 
   getProducts(page: number = 1, pageSize: number = 10): Observable<GridResponse<Product>> {
-    return this.http.get<GridResponse<Product>>(`${environment.apiUrl}/products?page=${page}&pageSize=${pageSize}`);
+    return this.http.get<GridResponse<Product>>(`${environment.apiUrl}/api/products?page=${page}&pageSize=${pageSize}`);
   }
 }
