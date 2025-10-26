@@ -41,7 +41,7 @@ def response_delay_route(route: Route):
     time.sleep(3)
     route.continue_()
 
-def test_low_stock_data(page: Page):
+def test_low_stock_data(browser_page, base_url):
     LOW_STOCK_THRESHOLD = 10
     WARNING_STOCK_THRESHOLD = 50
 
@@ -52,11 +52,12 @@ def test_low_stock_data(page: Page):
             return 'rgb(255, 243, 224)'
         return 'rgb(232, 245, 233)'
     
-    page.route('**/api/products**', low_stock_route)
-    page.goto('http://localhost:4200/products')
-    expect(page.locator('div.grid-container')).to_be_visible()
+    browser_page.route('**/api/products**', low_stock_route)
+    browser_page.goto(base_url)
+    browser_page.locator("//a[@href='/products']").click()
+    expect(browser_page.locator('div.grid-container')).to_be_visible()
 
-    stock_cells = page.locator('.ag-cell[col-id="stock"]').all()
+    stock_cells = browser_page.locator('.ag-cell[col-id="stock"]').all()
 
     assert len(stock_cells) > 0, "No records were found on the grid"
 
@@ -69,10 +70,11 @@ def test_low_stock_data(page: Page):
         expect(cell).to_have_css('background-color', get_expected_color(value))
     
 
-def test_loading_indicator(page: Page):
-    page.route('**/api/products**', response_delay_route)
-    page.goto('http://localhost:4200/products')
-    expect(page.locator('div.grid-container')).to_be_visible()
-    expect(page.locator('div.spinner')).to_be_visible()
-    expect(page.locator('//div[@role="row"]')).to_be_visible()
+def test_loading_indicator(browser_page, base_url):
+    browser_page.route('**/api/products**', response_delay_route)
+    browser_page.goto(base_url)
+    browser_page.locator("//a[@href='/products']").click()
+    expect(browser_page.locator('div.grid-container')).to_be_visible()
+    expect(browser_page.locator('div.spinner')).to_be_visible()
+    expect(browser_page.locator('//div[@role="row"]')).to_be_visible()
     

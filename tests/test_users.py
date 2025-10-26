@@ -46,13 +46,13 @@ def status_color_route(route: Route):
         }
     )
 
-def test_users_no_records(page: Page):
-    page.route('**/api/users**', no_records_route)
-    page.goto('http://localhost:4200/users')
-    msg = page.locator('span.ag-overlay-no-rows-center')
+def test_users_no_records(browser_page, base_url):
+    browser_page.route('**/api/users**', no_records_route)
+    browser_page.goto(base_url)
+    msg =  browser_page.locator('span.ag-overlay-no-rows-center')
     expect(msg).to_have_text('No Rows To Show')
 
-def test_user_status_color(page: Page):
+def test_user_status_color(browser_page, base_url):
     def get_users_status_colors(status: str) -> str:
         if status == 'Pending':
             return 'rgb(255, 165, 0)'
@@ -60,11 +60,11 @@ def test_user_status_color(page: Page):
             return 'rgb(255, 0, 0)'
         return 'rgb(0, 128, 0)'
 
-    page.route('**/api/users**', status_color_route)
-    page.goto('http://localhost:4200/users')
-    expect(page.locator('div.grid-container')).to_be_visible()
+    browser_page.route('**/api/users**', status_color_route)
+    browser_page.goto(base_url)
+    expect(browser_page.locator('div.grid-wrapper')).to_be_visible()
 
-    users_status_cells = page.locator('.ag-cell[col-id="status"]').all()
+    users_status_cells = browser_page.locator('.ag-cell[col-id="status"]').all()
 
     assert len(users_status_cells) > 0, "No records were found on the grid"
 
