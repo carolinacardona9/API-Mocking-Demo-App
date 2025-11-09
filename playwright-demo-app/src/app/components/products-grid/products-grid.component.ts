@@ -27,6 +27,7 @@ import { SpinnerComponent } from '../app-spinner/app-spinner.component';
           [paginationPageSize]="pageSize"
           [paginationPageSizeSelector]="[10, 25, 50, 100]"
           [suppressPaginationPanel]="false"
+          [overlayNoRowsTemplate]="'No Rows To Show'"
           (gridReady)="onGridReady($event)"
           style="width: 100%; height: 600px;"
         />
@@ -138,6 +139,10 @@ export class ProductsGridComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    // Hide overlay if we're currently loading
+    if (this.isLoading) {
+      this.gridApi.hideOverlay();
+    }
   }
 
   previousPage() {
@@ -161,15 +166,29 @@ export class ProductsGridComponent implements OnInit {
 
   loadData() {
     this.isLoading = true;
+    // Hide the "No Rows" overlay when loading
+    if (this.gridApi) {
+      this.gridApi.hideOverlay();
+    }
     this.apiService.getProducts(this.currentPage, this.pageSize).subscribe({
       next: (response) => {
         this.rowData = response.data;
         this.totalRecords = response.total;
         this.isLoading = false;
+        // Show "No Rows" overlay only if there are no rows and not loading
+        if (this.gridApi && this.rowData.length === 0) {
+          this.gridApi.showNoRowsOverlay();
+        } else if (this.gridApi) {
+          this.gridApi.hideOverlay();
+        }
       },
       error: (error) => {
         console.error('Error loading products:', error);
         this.isLoading = false;
+        // Show "No Rows" overlay if there are no rows after error
+        if (this.gridApi && this.rowData.length === 0) {
+          this.gridApi.showNoRowsOverlay();
+        }
       }
     });
   }

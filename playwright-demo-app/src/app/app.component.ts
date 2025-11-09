@@ -56,9 +56,10 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
       }
       nav a:hover {
         background-color: #f0f0f0;
+        color: #5f5dd1;
       }
       nav a.active {
-        background-color: #007bff;
+        background-color: #5f5dd1;
         color: white;
       }
     `,

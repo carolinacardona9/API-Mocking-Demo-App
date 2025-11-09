@@ -66,6 +66,75 @@ npm install ag-grid-angular ag-grid-community --legacy-peer-deps
 npm install ag-grid-angular@32.2.1 ag-grid-community@32.2.1 --legacy-peer-deps
 ```
 
-## PLAYWRIGHT TESTS
+## TESTING (pytest + BDD)
 
-### COMING SOON
+This project uses **pytest** with **pytest-bdd** for tests in Gherkin (BDD) format.
+
+### Step 1: Install test dependencies
+
+```bash
+# Option 1: Use the script
+./install_test_dependencies.sh
+
+# Option 2: Manual
+pip install -r requirements.txt
+playwright install chromium
+```
+
+### Step 2: Test Structure
+
+```
+tests/
+├── features/              # .feature files (Gherkin)
+│   ├── users.feature
+│   ├── products.feature
+│   └── images.feature
+├── step_defs/            # Step definitions (implementations)
+│   ├── common_steps.py
+│   ├── users_steps.py
+│   ├── products_steps.py
+│   └── images_steps.py
+├── test_bdd_*.py         # Files that import scenarios
+├── test_*.py             # Traditional tests
+└── conftest.py           # pytest configuration
+```
+
+### Step 3: Run Tests
+
+**All tests:**
+```bash
+pytest tests/ -v -s
+```
+
+**BDD tests only (Gherkin):**
+```bash
+pytest tests/test_bdd_*.py -v -s
+```
+
+**Traditional tests:**
+```bash
+pytest tests/test_users.py tests/test_products.py tests/test_images.py -v -s
+```
+
+**Specific test:**
+```bash
+pytest tests/test_bdd_users.py::test_display_users_with_no_records -v -s
+```
+
+**By marker:**
+```bash
+pytest -m users -v -s
+pytest -m images -v -s
+```
+
+### Environments
+
+**Local (default):**
+```bash
+pytest tests/ -v -s
+```
+
+**Production:**
+```bash
+pytest tests/ --env=prod -v -s
+```
