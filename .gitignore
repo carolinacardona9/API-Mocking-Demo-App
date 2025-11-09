@@ -52,3 +52,4 @@ Thumbs.db
 /tests/venv
 .vscode
 .pytest_cache
+/tests/step_defs/__pycache__

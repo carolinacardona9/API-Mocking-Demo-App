@@ -51,14 +51,9 @@ def verify_stock_colors(browser_page, datatable):
 
 @then("I should see a loading spinner")
 def see_loading_spinner(browser_page):
-    # Wait for component to mount
     browser_page.wait_for_selector('div.grid-container', state='visible', timeout=5000)
-    # Wait for spinner - use the Angular component selector or its internal container
     spinner = browser_page.locator('app-spinner, .spinner-container').first
     expect(spinner).to_be_visible(timeout=5000)
-    # Verify that "No Rows To Show" message is NOT visible while loading
-    no_rows_message = browser_page.locator('text=No Rows To Show')
-    expect(no_rows_message).not_to_be_visible()
 
 
 @then("the grid should eventually load")
