@@ -1,7 +1,7 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/*/dist
+# /*/dist
 /*/tmp
 /out-tsc
 /bazel-out
@@ -52,3 +52,4 @@ Thumbs.db
 /tests/venv
 .vscode
 .pytest_cache
+/tests/step_defs/__pycache__

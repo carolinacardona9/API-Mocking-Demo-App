@@ -1,45 +1,5 @@
-from playwright.sync_api import Page, Route, expect
-import time
-import random
-
-def low_stock_route(route: Route):
-    route.fulfill(
-        json={
-            "data": [
-                {
-                    "id": 1,
-                    "name": "Low Stock Test",
-                    "category": "Testing tools",
-                    "price": 50,
-                    "stock": random.randint(0, 9),
-                    "supplier": "Testing supply Inc."
-                },
-                {
-                    "id": 2,
-                    "name": "Warning Stock Test",
-                    "category": "Testing clothes",
-                    "price": 70.24,
-                    "stock": random.randint(10, 49),
-                    "supplier": "Testing supply Inc."
-                },
-                {
-                    "id": 3,
-                    "name": "High Stock Test",
-                    "category": "Testing vehicles",
-                    "price": 900,
-                    "stock": random.randint(50,2000),
-                    "supplier": "Testing supply Inc."
-                }
-            ],
-            "total": 3,
-            "page": 1,
-            "pageSize": 10
-        }
-    )
-
-def response_delay_route(route: Route):
-    time.sleep(3)
-    route.continue_()
+from playwright.sync_api import expect
+from tests.helpers.route_helpers import setup_low_stock_route, setup_delayed_products_route
 
 def test_low_stock_data(browser_page, base_url):
     LOW_STOCK_THRESHOLD = 10
@@ -52,7 +12,7 @@ def test_low_stock_data(browser_page, base_url):
             return 'rgb(255, 243, 224)'
         return 'rgb(232, 245, 233)'
     
-    browser_page.route('**/api/products**', low_stock_route)
+    setup_low_stock_route(browser_page)
     browser_page.goto(base_url)
     browser_page.locator("//a[@href='/products']").click()
     expect(browser_page.locator('div.grid-container')).to_be_visible()
@@ -71,10 +31,17 @@ def test_low_stock_data(browser_page, base_url):
     
 
 def test_loading_indicator(browser_page, base_url):
-    browser_page.route('**/api/products**', response_delay_route)
+    setup_delayed_products_route(browser_page, seconds=10)
     browser_page.goto(base_url)
     browser_page.locator("//a[@href='/products']").click()
+    # Wait for component to mount
     expect(browser_page.locator('div.grid-container')).to_be_visible()
-    expect(browser_page.locator('div.spinner')).to_be_visible()
-    expect(browser_page.locator('//div[@role="row"]')).to_be_visible()
+    # Wait for spinner - use the Angular component selector or its internal container
+    spinner = browser_page.locator('app-spinner, .spinner-container').first
+    expect(spinner).to_be_visible(timeout=5000)
+    # Verify that "No Rows To Show" message is NOT visible while loading
+    no_rows_message = browser_page.locator('text=No Rows To Show')
+    expect(no_rows_message).not_to_be_visible()
+    # Wait for grid to eventually load after API responds (10 seconds delay + processing)
+    expect(browser_page.locator('//div[@role="row"]')).to_be_visible(timeout=15000)
     

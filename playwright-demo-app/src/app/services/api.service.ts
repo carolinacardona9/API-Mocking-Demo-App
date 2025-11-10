@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: number;
@@ -30,16 +31,15 @@ export interface GridResponse<T> {
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
-  private baseUrl = 'http://localhost:8000/api';
+export class ApiService {  
 
   constructor(private http: HttpClient) {}
 
   getUsers(page: number = 1, pageSize: number = 10): Observable<GridResponse<User>> {
-    return this.http.get<GridResponse<User>>(`${this.baseUrl}/users?page=${page}&pageSize=${pageSize}`);
+    return this.http.get<GridResponse<User>>(`${environment.apiUrl}/api/users?page=${page}&pageSize=${pageSize}`);
   }
 
   getProducts(page: number = 1, pageSize: number = 10): Observable<GridResponse<Product>> {
-    return this.http.get<GridResponse<Product>>(`${this.baseUrl}/products?page=${page}&pageSize=${pageSize}`);
+    return this.http.get<GridResponse<Product>>(`${environment.apiUrl}/api/products?page=${page}&pageSize=${pageSize}`);
   }
 }

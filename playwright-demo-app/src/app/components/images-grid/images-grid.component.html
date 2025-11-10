@@ -1,0 +1,27 @@
+<div class="images-container">
+  <h2>Product images</h2>
+  <div class="images-grid">
+    <div 
+      *ngFor="let image of images; let i = index" 
+      class="image-card"
+      [class.loaded]="image.loaded"
+      [class.error]="image.error"
+    >
+      <div class="image-wrapper">
+        <img 
+          [src]="image.url" 
+          [alt]="image.title"
+          (load)="onImageLoad(i)"
+          (error)="onImageError(i)"
+          loading="lazy"
+        />
+        <div *ngIf="!image.loaded && !image.error" class="loading-spinner">
+          <div class="spinner"></div>
+        </div>
+        <div *ngIf="image.error" class="error-message">
+          Error al cargar imagen
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
