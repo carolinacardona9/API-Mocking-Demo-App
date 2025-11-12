@@ -3,6 +3,7 @@ from pytest_bdd import given, when, then, parsers
 from playwright.sync_api import expect
 from tests.helpers.route_helpers import setup_no_records_route, setup_status_color_route
 from pytest_bdd import parsers
+from pages.users_page import UsersPage
 
 
 @given("I mock the API to return no users")
@@ -16,18 +17,18 @@ def mock_users_with_statuses(browser_page):
 
 
 @then(parsers.parse('I should see the message "{message}"'))
-def see_message(browser_page, message):
-    msg = browser_page.locator('span.ag-overlay-no-rows-center')
+def see_message(browser_page, message, users_page: UsersPage):
+    msg = browser_page.locator(users_page.no_rows_message)
     expect(msg).to_have_text(message)
 
 
 @then("I should see users with correct status colors")
-def verify_status_colors(browser_page, datatable):
+def verify_status_colors(browser_page, datatable, users_page: UsersPage):
 
-    grid = browser_page.locator('div.grid-wrapper, div.grid-container')
+    grid = browser_page.locator(users_page.users_grid_container)
     expect(grid).to_be_visible()
     
-    users_status_cells = browser_page.locator('.ag-cell[col-id="status"]').all()
+    users_status_cells = browser_page.locator(users_page.status_column_cells).all()
     assert len(users_status_cells) > 0, "No records were found on the grid"
     # Create color map from datatable
     color_map = {}

@@ -53,3 +53,5 @@ Thumbs.db
 .vscode
 .pytest_cache
 /tests/step_defs/__pycache__
+/tests/helpers/__pycache__
+/tests/pages/__pycache__

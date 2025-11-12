@@ -1,6 +1,8 @@
 import pytest
 from playwright.sync_api import sync_playwright, Page
-
+from pages.products_page import ProductsPage
+from pages.users_page import UsersPage
+from pages.images_page import ImagesPage
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -47,3 +49,18 @@ def browser_page(playwright, request):
     yield page
     context.close()
     browser.close()
+
+
+@pytest.fixture(scope="session")
+def products_page():
+    return ProductsPage()
+
+
+@pytest.fixture(scope="session")
+def users_page():
+    return UsersPage()
+
+
+@pytest.fixture(scope="session")
+def images_page():
+    return ImagesPage()
