@@ -7,6 +7,10 @@ Feature: Products Grid
     Given the application is running
     And I navigate to the products page
 
+  Scenario: Products page is visible and loads data
+    When the page loads
+    Then products grid is visible and show records
+
   Scenario: Display products with stock color indicators
     Given I mock the API to return products with different stock levels
     When the page loads

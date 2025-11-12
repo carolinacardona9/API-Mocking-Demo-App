@@ -7,6 +7,10 @@ Feature: Users Grid
     Given the application is running
     And I navigate to the users page
 
+  Scenario: Users grid is visible and loads data
+    When the page loads
+    Then users grid is visible and show records
+
   Scenario: Display users with no records
     Given I mock the API to return no users
     When the page loads
