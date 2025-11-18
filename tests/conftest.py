@@ -1,6 +1,14 @@
 import pytest
 from playwright.sync_api import sync_playwright, Page
 
+# Register step definitions globally for pytest-bdd
+pytest_plugins = [
+    'tests.step_defs.common_steps',
+    'tests.step_defs.products_steps',
+    'tests.step_defs.users_steps',
+    'tests.step_defs.images_steps',
+]
+
 
 def pytest_addoption(parser):
     parser.addoption(

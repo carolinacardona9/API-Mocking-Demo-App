@@ -5,20 +5,22 @@ Feature: Products Grid
 
   Background:
     Given the application is running
-    And I navigate to the products page
+
+  Scenario: Load products successfully
+    Given I navigate to the products page
+    When the page loads
+    Then I should see products in the grid
 
   Scenario: Display products with stock color indicators
     Given I mock the API to return products with different stock levels
+    And I navigate to the products page
     When the page loads
     Then I should see products with correct stock background colors
-      | Stock Range | Color               |
-      | 0-9         | rgb(255, 235, 238)|
-      | 10-49       | rgb(255, 243, 224)|
-      | 50+         | rgb(232, 245, 233)|
 
   Scenario: Display loading indicator during API delay
     Given I mock the API to have a delay of 10 seconds
-    When I navigate to the products page
+    And I navigate to the products page
+    When the page loads
     Then I should see a loading spinner
     And the grid should eventually load
 

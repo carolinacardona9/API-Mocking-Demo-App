@@ -1,6 +1,22 @@
 from playwright.sync_api import Page, Route, expect
 import time
 
+def test_load_users_successfully(browser_page, base_url):
+    """Load users successfully without mocking the API"""
+    browser_page.goto(base_url)
+    browser_page.locator("//a[@href='/users']").click()
+    browser_page.wait_for_load_state("networkidle")
+    
+    # Verify grid is visible
+    grid = browser_page.locator('div.grid-wrapper, div.grid-container')
+    expect(grid).to_be_visible()
+    
+    # Verify that we have at least one user row (excluding header)
+    user_rows = browser_page.locator('//div[@role="row"]')
+    expect(user_rows.first).to_be_visible(timeout=10000)
+    rows = user_rows.all()
+    assert len(rows) > 1, "No users were found in the grid"
+
 def no_records_route(route: Route):
     route.fulfill(
         json={
