@@ -9,6 +9,9 @@ pytest_plugins = [
     'tests.step_defs.images_steps',
 ]
 
+from tests.pages.products_page import ProductsPage
+from tests.pages.users_page import UsersPage
+from tests.pages.images_page import ImagesPage
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -55,3 +58,18 @@ def browser_page(playwright, request):
     yield page
     context.close()
     browser.close()
+
+
+@pytest.fixture(scope="session")
+def products_page():
+    return ProductsPage()
+
+
+@pytest.fixture(scope="session")
+def users_page():
+    return UsersPage()
+
+
+@pytest.fixture(scope="session")
+def images_page():
+    return ImagesPage()

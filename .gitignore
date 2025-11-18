@@ -65,7 +65,9 @@ build/
 .pytest_cache/
 .pytest_cache
 tests/.pytest_cache/
-tests/__pycache__/
+tests/__pycache__
+/tests/helpers/__pycache__
+/tests/pages/__pycache__/
 tests/**/__pycache__/
 *.pytest_cache
 
