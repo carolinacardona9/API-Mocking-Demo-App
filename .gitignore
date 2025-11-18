@@ -47,11 +47,60 @@ Thumbs.db
 /playwright-demo-app/dist
 /playwright-demo-app/tmp
 /playwright-demo-backend/venv
-/tests/__pycache__
-/tests/.pytest_cache
 /tests/venv
 .vscode
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Pytest cache
+.pytest_cache/
 .pytest_cache
-/tests/step_defs/__pycache__
+tests/.pytest_cache/
+tests/__pycache__
 /tests/helpers/__pycache__
-/tests/pages/__pycache__
+/tests/pages/__pycache__/
+tests/**/__pycache__/
+*.pytest_cache
+
+# Coverage cache
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+
+# Playwright cache
+.playwright/
+playwright-report/
+test-results/
+playwright/.cache/
+
+# Node cache
+.npm/
+.yarn/
+.pnp/
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Angular cache
+.angular/cache
+.angular/
+
+# General cache directories
+.cache/
+*.cache
+cache/
+tmp/
+temp/

@@ -1,6 +1,21 @@
 from playwright.sync_api import expect
 from tests.helpers.route_helpers import setup_low_stock_route, setup_delayed_products_route
 
+def test_load_products_successfully(browser_page, base_url):
+    """Load products successfully without mocking the API"""
+    browser_page.goto(base_url)
+    browser_page.locator("//a[@href='/products']").click()
+    browser_page.wait_for_load_state("networkidle")
+    
+    # Verify grid is visible
+    expect(browser_page.locator('div.grid-container')).to_be_visible()
+    
+    # Verify that we have at least one product row (excluding header)
+    product_rows = browser_page.locator('//div[@role="row"]')
+    expect(product_rows.first).to_be_visible(timeout=10000)
+    rows = product_rows.all()
+    assert len(rows) > 1, "No products were found in the grid"
+
 def test_low_stock_data(browser_page, base_url):
     LOW_STOCK_THRESHOLD = 10
     WARNING_STOCK_THRESHOLD = 50

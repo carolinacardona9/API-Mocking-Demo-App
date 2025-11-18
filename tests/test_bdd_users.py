@@ -1,15 +1,16 @@
 """BDD tests for users feature using pytest-bdd"""
 import os
 from pathlib import Path
-from pytest_bdd import scenario
+from pytest_bdd import scenarios
 
-# Import step definitions
-from tests.step_defs import common_steps, users_steps
+# Import step definitions - must be imported before scenarios()
+from tests.step_defs import common_steps
+from tests.step_defs import users_steps
 
 # Get the base directory (project root)
 BASE_DIR = Path(__file__).parent.parent
+FEATURE_FILE = os.path.join(BASE_DIR, 'tests', 'features', 'users.feature')
 
-# Import scenarios from feature files
-scenario(os.path.join(BASE_DIR, 'tests', 'features', 'users.feature'), 'Display users with no records')
-scenario(os.path.join(BASE_DIR, 'tests', 'features', 'users.feature'), 'Display users with status colors')
+# Register all scenarios from the feature file
+scenarios(FEATURE_FILE)
 

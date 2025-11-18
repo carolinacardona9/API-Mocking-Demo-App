@@ -1,6 +1,6 @@
 from pytest_bdd import given, when, then, parsers
 from playwright.sync_api import expect
-from pages.images_page import ImagesPage
+from tests.pages.images_page import ImagesPage
 from tests.helpers.route_helpers import (
     setup_abort_all_images,
     setup_abort_first_n_images
