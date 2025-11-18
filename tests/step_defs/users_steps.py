@@ -17,8 +17,8 @@ def mock_users_with_statuses(browser_page):
 
 @given("I navigate to the users page")
 @when("I navigate to the users page")
-def navigate_users_page(browser_page, base_url):
-    browser_page.locator("//a[@href='/users']").click()
+def navigate_users_page(browser_page, base_url, users_page: UsersPage):
+    browser_page.locator(users_page.users_link).click()
 
 
 @then("I should see users in the grid")
@@ -38,7 +38,6 @@ def see_message(browser_page, message, users_page: UsersPage):
 
 @then("I should see users with correct status colors")
 def verify_status_colors(browser_page, users_page: UsersPage):
-
     grid = browser_page.locator(users_page.users_grid_container)
     expect(grid).to_be_visible()
     

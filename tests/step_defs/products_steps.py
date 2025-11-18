@@ -17,8 +17,8 @@ def mock_api_delay(browser_page, seconds):
 
 @given("I navigate to the products page")
 @when("I navigate to the products page")
-def navigate_products_page(browser_page, base_url):
-    browser_page.locator("//a[@href='/products']").click()
+def navigate_products_page(browser_page, base_url, products_page: ProductsPage):
+    browser_page.locator(products_page.products_tab_locator).click()
 
 
 @then("I should see products in the grid")
@@ -31,7 +31,7 @@ def see_products_in_grid(browser_page, products_page: ProductsPage):
 
 
 @then("I should see products with correct stock background colors")
-def verify_stock_colors(browser_page,  products_page: ProductsPage):
+def verify_stock_colors(browser_page, products_page: ProductsPage):
     browser_page.locator(products_page.products_tab_locator).click()
     expect(browser_page.locator(products_page.products_grid_container)).to_be_visible()
     stock_cells = browser_page.locator(products_page.stock_column_cells).all()
@@ -52,8 +52,7 @@ def see_loading_spinner(browser_page, products_page: ProductsPage):
     browser_page.wait_for_selector(products_page.products_grid_container, state='visible', timeout=5000)
     spinner = browser_page.locator(products_page.loading_spinner).first
     expect(spinner).to_be_visible(timeout=5000)
-    # Verify that "No Rows To Show" message is NOT visible while loading
-    no_rows_message = browser_page.locator('text=No Rows To Show')
+    no_rows_message = browser_page.locator(products_page.no_rows_message)
     expect(no_rows_message).not_to_be_visible()
 
 

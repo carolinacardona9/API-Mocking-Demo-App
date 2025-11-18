@@ -16,6 +16,7 @@ class ProductsPage:
         self.stock_column_cells = '.ag-cell[col-id="stock"]'
         self.loading_spinner = 'app-spinner, .spinner-container'
         self.grid_rows = '//div[@role="row"]'
+        self.no_rows_message = 'text=No Rows To Show'
     
     def get_expected_stock_color(self, stock_value: int) -> str:
         """Get the expected background color based on stock value"""
