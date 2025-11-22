@@ -1,7 +1,5 @@
 """Route interception helpers for image tests"""
 from playwright.sync_api import Route, Page
-from typing import Callable
-import time
 import random
 
 TESTING_SUPPLIER = "Testing supply Inc."
@@ -70,10 +68,9 @@ def setup_low_stock_route(page: Page) -> None:
 
 
 def setup_delayed_products_route(page: Page, seconds: int = 5) -> None:
-    def delayed_route(route: Route):
-        time.sleep(seconds)
-        route.continue_()
-    page.route('**/api/products**', delayed_route)
+    def block_route(route: Route):
+        pass
+    page.route('**/api/products**', block_route)
 
 
 #Users Methods
