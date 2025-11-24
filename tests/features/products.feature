@@ -17,7 +17,7 @@ Feature: Products Grid
     When the page loads
     Then I should see products with correct stock background colors
 
-  Scenario: Display loading indicator during API delay 2
+  Scenario: Display loading indicator during API delay
     Given I mock the API to have a delay of 10 seconds
     When I navigate to the products page
     Then I should see a loading spinner
